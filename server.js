@@ -84,9 +84,8 @@ app.post('/register',(req,res)=>{
         email:email,
         joined:new Date()
     }).then(response=>{
-        
+        res.json(database.users[database.users.length-1])
     })
-    res.json(database.users[database.users.length-1])
 })
 
 app.get('/profile/:id',(req,res)=>{
