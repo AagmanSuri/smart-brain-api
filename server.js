@@ -1,7 +1,24 @@
 import express from 'express';
 import cors from 'cors';
+// const knex = require('knex')
+import knex from 'knex';
 
-const app = express();
+const db = knex({
+    client: 'mysql',
+    connection: {
+      host : '127.0.0.1',
+      user : 'root',
+      password : 'Password@123',
+      database : 'smartbrain'
+    }
+  });
+db.select('*').from("users").then(data=>{
+    console.log(data)})
+.catch((er)=>{
+    console.log(er,"errrrrrrr")
+})
+
+  const app = express();
 //middelware
 app.use(express.json());
 app.use(cors());
@@ -54,12 +71,20 @@ app.post('/signin',(req,res)=>{
 
 app.post('/register',(req,res)=>{
     const {email,name , password} = req.body;
-    database.users.push({
-        id:'125',
+    // database.users.push({
+    //     id:'125',
+    //     name:name,
+    //     email:email,
+    //     entries:0,
+    //     joined: new Date()
+    // })
+
+    db('users').insert({
         name:name,
         email:email,
-        entries:0,
-        joined: new Date()
+        joined:new Date()
+    }).then(response=>{
+        
     })
     res.json(database.users[database.users.length-1])
 })
@@ -95,7 +120,7 @@ app.put('/image',(req,res)=>{
     }
 })
 
-app.listen(3000);
+app.listen(3001);
 
 // '/' ===> root it is working 
 // '/signin'===> Post - success/failure
